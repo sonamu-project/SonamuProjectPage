@@ -22,11 +22,11 @@ public class TranslateController {
 
     @PostMapping("/translate")
     public String translate(Model model, SourceCode sourceCode) {
-        translateService.translate(sourceCode);
+        String output = translateService.translate(sourceCode);
         model.addAttribute("source", sourceCode.getCode());
-        model.addAttribute("target", targetCode.getCode());
+        model.addAttribute("target", output);
+
 
         return "index";
-
     }
 }

@@ -22,7 +22,7 @@ public class TranslateService {
         this.sonamuPreprocessor = sonamuPreprocessor;
     }
 
-    public void translate(SourceCode sourceCode) {
+    public String translate(SourceCode sourceCode) {
         CharStream codeCharStream = CharStreams.fromString(sourceCode.getCode());
         SolidityLexer lexer = new SolidityLexer(codeCharStream);
         CommonTokenStream tokens = new CommonTokenStream(lexer);
@@ -31,6 +31,7 @@ public class TranslateService {
 
         ParseTreeWalker walker = new ParseTreeWalker();
         walker.walk(sonamuPreprocessor, tree);
+        return sonamuPreprocessor.getOutput();
     }
 
 }

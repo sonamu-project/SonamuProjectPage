@@ -14,6 +14,7 @@ import java.lang.annotation.Target;
 public class SonamuPreprocessor extends SolidityBaseListener implements ParseTreeListener {
 
     private final TargetCode targetCode;
+    private String output;
 
     @Autowired
     public SonamuPreprocessor(TargetCode targetCode) {
@@ -51,10 +52,15 @@ public class SonamuPreprocessor extends SolidityBaseListener implements ParseTre
         }
         // 완성된 프로그램 반환
         // targetCode에 string setting
+
         targetCode.setCode(sourceUnit);
+
     }
 
-    // pragmaDirective
+
+    public String getOutput() {
+        return output;
+    }
 
     @Override
     public void exitPragmaDirective(SolidityParser.PragmaDirectiveContext ctx) {
