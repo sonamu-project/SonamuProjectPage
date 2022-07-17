@@ -108,8 +108,8 @@ $(function(){
 });
 
 // function resizeTextArea() {
-//     // $("#inputText").height(1).height($("#inputText").prop('scrollHeight')+5 );
-//     // $("#outputText").height(1).height($("#outputText").prop('scrollHeight')+5 );
+//     $("#inputText").height(1).height($("#inputText").prop('scrollHeight')+5 );
+//     $("#outputText").height(1).height($("#outputText").prop('scrollHeight')+5 );
 // }
 
 function downloadFile(fileName, content) {

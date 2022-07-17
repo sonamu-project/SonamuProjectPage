@@ -2,18 +2,6 @@ body {
     font-family: 'Yeon Sung', cursive !important;
 }
 
-#translate, #spellCheck{
-     border: 2px solid #2f991a;
-     border-radius: 2px;
-     color: #052a53;
-     padding: 0 10px;
-     height: 50px;
-     line-height: 50px;
-     font-size: 20px;
-     margin-right: 20px;
-     cursor:pointer;
-}
-
 .input-box {
      position: relative;
 }
