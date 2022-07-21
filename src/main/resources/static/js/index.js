@@ -1,11 +1,4 @@
 $(function(){
-    // 페이지 로드 시 확장자 자동 지정
-    if ($("input[name='typeOfCode']:checked").val() === "sol") {
-        $(".extension").text(".sonamu");
-    }
-    else {
-        $(".extension").text(".sol");
-    }
 
     // 언어 선택 라디오 버튼 이벤트
     $("input[name='typeOfCode']").click(function() {
