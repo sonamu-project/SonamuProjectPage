@@ -20,14 +20,21 @@ public class TranslateController {
         this.translateService = translateService;
     }
 
-    @PostMapping("/translate")
-    public String translate(Model model, SourceCode sourceCode) throws FileNotFoundException, UnsupportedEncodingException {
+    @PostMapping("/translateSonamu")
+    public String translateSonamu(Model model, SourceCode sourceCode) throws FileNotFoundException, UnsupportedEncodingException {
         String output = translateService.translate(sourceCode);
         model.addAttribute("source", sourceCode.getCode());
-        model.addAttribute("sourceType", sourceCode.getTypeOfCode());
         model.addAttribute("target", output);
 
         return "index";
+    }
 
+    @PostMapping("/translateSolidity")
+    public String translateSolidity(Model model, SourceCode sourceCode) throws FileNotFoundException, UnsupportedEncodingException {
+        String output = translateService.translate(sourceCode);
+        model.addAttribute("target", sourceCode.getCode());
+        model.addAttribute("source", output);
+
+        return "index";
     }
 }

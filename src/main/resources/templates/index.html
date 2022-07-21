@@ -18,7 +18,8 @@
 <body>
 <div>
   <div style="border:1px; float:left; width:37%; text-align: left;padding:10px;">
-    <a style="color:black !important;" class="text-decoration-none" href="./"><h1>소나무 언어 번역프로그램</h1></a>
+    <a style="color:black !important;" class="text-decoration-none" href="./"><h1>소나무 언어 번역프로그램</h1>
+    </a>
     <div class="row">
       <h4>Solidity언어를 소나무언어로 쉽게 볼 수 있으며 편리한 코드수정이 가능합니다.</h4>
       <p>개발자 : 박정필, 현상혁, 정지은</p>
@@ -53,88 +54,52 @@
   </div>
   <hr class="bg-danger border-2 border-top border-secondary w-100">
 
-<!--    <div class="row">-->
-<!--      <div class="col-md-3">-->
-<!--        <h3>번역 타입 선택</h3>-->
-<!--        <div class="row">-->
-<!--          <div class="col w-25">-->
-<!--            <div class="form-check form-check-inline">-->
-<!--              <input class="form-check-input" type="radio" name="typeOfCode" id="inlineRadio1"-->
-<!--                     value="sonamu"-->
-<!--                     th:checked="${sourceType eq 'sonamu'}">-->
-<!--              <label class="form-check-label" for="inlineRadio1"> 소나무 </label>-->
-<!--            </div>-->
-<!--            <div class="form-check form-check-inline">-->
-<!--              <input class="form-check-input" type="radio" name="typeOfCode" id="inlineRadio2"-->
-<!--                     value="solidity"-->
-<!--                     th:checked="${sourceType eq 'solidity'}">-->
-<!--              <label class="form-check-label" for="inlineRadio2"> solidity </label>-->
-<!--            </div>-->
-<!--          </div>-->
-<!--        </div>-->
-<!--      </div>-->
-<!--      <div class="col-md-5">-->
-<!--        <div class="row">-->
-<!--          <h3>맞춤법 검사 & 번역</h3>-->
-<!--          <div class="col-md-4">-->
-<!--            <button class="form-control border-success" type="button" id="spellCheck">맞춤법 검사-->
-<!--            </button>-->
-<!--          </div>-->
-<!--          <div class="col-md-8">-->
-<!--            <button class="form-control border-success" type="submit" id="translate">번역하기</button>-->
-<!--          </div>-->
-<!--        </div>-->
-<!--      </div>-->
-<!--    </div>-->
-
-
-    <div class="row">
-      <div class="col-lg-6" style="border:1px;width:49%;margin:0 0 0 10px;">
-        <form id="translateFormSonamu" th:action="@{/translate}" method="post">
+  <div class="row">
+    <div class="col-lg-6" style="border:1px;width:49%;margin:0 0 0 10px;">
+      <form id="translateFormSonamu" th:action="@{/translateSonamu}" method="post">
         <div class="Solidity-row-1" style="border:1px;height:4%;">
-          <div class="col" style="float:left;">
+          <div class="col">
             <h3>Solidity</h3>
           </div>
-          <div class="col" style="float:right;">
+          <div class="col">
             <input type="hidden" name="typeOfCode" value="solidity"/>
-            <button class="form-control border-success" type="submit" id="translate">View</button>
+            <button class="form-control border-success" type="submit">View</button>
           </div>
         </div>
         <div class="Solidity-row-2" style="border:1px;height:91%;">
           <p><textarea class="lined" type="text" name="code"
                        placeholder="번역할 코드를 입력하세요. "
-                       th:utext="${source}" id="inputText"></textarea></p>
+                       th:utext="${source}" id="solidity"></textarea></p>
         </div>
       </form>
-      </div>
-      <div class="col-lg-6 " style="border:1px; float:left;width:49%">
-        <form id="translateFormSolidity" th:action="@{/translate}" method="post">
-          <div>
+    </div>
+
+    <div class="col-lg-6 " style="border:1px; float:left;width:49%">
+      <form id="translateFormSolidity" th:action="@{/translateSolidity}" method="post">
         <div class="Solidity-row-1" style="border:1px;height:4%;">
-          <div class="col" style="float:left;">
+          <div class="col">
             <h3>Sonamu</h3>
           </div>
-          <div class="col" style="float:right;">
+          <div class="col">
             <input type="hidden" name="typeOfCode" value="sonamu"/>
-            <button class="form-control border-success" type="submit" id="apply">Solidity에 적용</button>
+            <button class="form-control border-success" type="submit">Solidity에 적용</button>
           </div>
         </div>
         <div class="Solidity-row-2" style="border:1px;height:91%;">
-          <p><textarea class="lined" type="text" name="code" placeholder="소나무언어로 확인하기" id="outputText"
+          <p><textarea class="lined" type="text" name="code" placeholder="소나무언어로 확인하기"
                        th:text="${target}"></textarea></p>
         </div>
-          </div>
-        </form>
-      </div>
+      </form>
     </div>
+
+  </div>
+
+  <script src="http://code.jquery.com/jquery-latest.js"></script>
+  <script type="text/javascript" src="/js/index.js"></script>
+  <script type="text/javascript" src="/js/jquery-linedtextarea.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2"
+          crossorigin="anonymous"></script>
 </div>
-
-
-<script src="http://code.jquery.com/jquery-latest.js"></script>
-<script type="text/javascript" src="/js/index.js"></script>
-<script type="text/javascript" src="/js/jquery-linedtextarea.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2"
-        crossorigin="anonymous"></script>
 </body>
 </html>

@@ -12,7 +12,7 @@ $(function(){
 
     // 파일 불러오기 onChange event
     $("#openCode").change(function() {
-        const content = $("#inputText");
+        const content = $("#solidity");
         const file = this.files[0];
         const reader = new FileReader();
 
@@ -30,61 +30,14 @@ $(function(){
     $("#saveCode").click(function() {
         let fileName = $("#fileName").val();
         // 입력 언어에 따라 저장 언어의 확장자 자동 지정
-        if ($("input[name='typeOfCode']:checked").val() === "sonamu") {
-            fileName += ".sol";
-        }
-        else {
-            fileName += ".sonamu";
-        }
-        const content = $("#outputText").val();
+        fileName += ".sol";
+        const content = $("#solidity").val();
 
         if (fileName) {
             downloadFile(fileName, content);
         } else {
             alert("저장할 파일의 이름을 입력하세요!");
         }
-    })
-
-    // 맞춤법 검사 onClick event
-    $("#spellCheck").click(async function () {
-        const inputText = $("#inputText").val().replaceAll("'", "\"");
-        const inputLength = inputText.length;
-
-        let like;
-        if (inputText.length > 1000) {
-            like = confirm("맞춤법 검사 글자 수 제한인 1000자를 초과하여\n" + (parseInt(inputLength / 1000) + 1) + "페이지로 나뉘어 실행됩니다.");
-        }
-        else {
-            like = true; // 1000자 이하인 경우 바로 진행
-        }
-
-        const wait = (timeToDelay) => new Promise((resolve) => setTimeout(resolve, timeToDelay))
-
-        if (like) {
-            for (let i = 0; i < inputLength; i += 1000) {
-                await wait(50); // delay
-
-                const insdoc = "<input type='hidden' name='sentence' value='" + inputText.substring(i, i + 1000) + "'>";
-
-                const goform = $("<form>", {
-                    method: "post",
-                    action: 'https://dic.daum.net/grammar_checker.do',
-                    target: 'translate' + i,
-                    html: insdoc
-                }).appendTo("body");
-
-                goform.submit();
-            }
-        }
-    })
-
-    // 언어 종류 선택하지 않았을 시 summit 되지 않도록 함
-    $("#translateForm").submit(function() {
-        if ($("input[name='typeOfCode']:checked").val() === undefined) {
-            alert('입력 언어를 선택하세요!');
-            return false;
-        }
-        return true;
     })
 
     // inputText에 코드 입력 시 textarea 크기 자동 조절

@@ -30,9 +30,11 @@
 	width:93% !important;
 	height:650px !important;
 }
+
 /*.lined::-webkit-scrollbar {*/
 /*	display: none;*/
 /*}*/
+
 .linedtextarea {
 	padding: 0px;
 	margin: 0px;
