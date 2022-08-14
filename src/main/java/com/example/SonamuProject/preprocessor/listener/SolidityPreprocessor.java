@@ -1,6 +1,5 @@
 package com.example.SonamuProject.preprocessor.listener;
 
-import com.example.SonamuProject.preprocessor.generated.SolidityParser;
 import com.example.SonamuProject.preprocessor.sonamuGenerated.SonamuBaseListener;
 import com.example.SonamuProject.preprocessor.sonamuGenerated.SonamuParser;
 import org.antlr.v4.runtime.tree.ParseTreeListener;

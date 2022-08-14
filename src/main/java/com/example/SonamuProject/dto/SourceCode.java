@@ -1,5 +1,8 @@
 package com.example.SonamuProject.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+
 public class SourceCode {
 
     String code;
