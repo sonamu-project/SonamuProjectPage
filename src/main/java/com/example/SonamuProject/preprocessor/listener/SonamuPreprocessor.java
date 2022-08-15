@@ -2,6 +2,10 @@ package com.example.SonamuProject.preprocessor.listener;
 
 import com.example.SonamuProject.preprocessor.generated.SolidityBaseListener;
 import com.example.SonamuProject.preprocessor.generated.SolidityParser;
+import com.example.SonamuProject.preprocessor.generated.SolidityParser.StructDefinitionContext;
+import com.example.SonamuProject.preprocessor.generated.SolidityParser.UsingForDeclarationContext;
+import com.example.SonamuProject.preprocessor.generated.SolidityParser.VariableDeclarationContext;
+import com.example.SonamuProject.preprocessor.generated.SolidityParser.VariableDeclarationListContext;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 import org.antlr.v4.runtime.tree.ParseTreeProperty;
 
@@ -787,7 +791,8 @@ public class SonamuPreprocessor extends SolidityBaseListener implements ParseTre
     @Override
     /* typeName
     ( PublicKeyword | InternalKeyword | PrivateKeyword | ConstantKeyword )*
-    identifier ('=' expression)? ';' ; */ public void exitStateVariableDeclaration(
+    identifier ('=' expression)? ';' ; */
+    public void exitStateVariableDeclaration(
         SolidityParser.StateVariableDeclarationContext ctx) {
         int childNum = ctx.getChildCount();
         String typeName = strTree.get(ctx.typeName());
@@ -1017,6 +1022,30 @@ public class SonamuPreprocessor extends SolidityBaseListener implements ParseTre
         strTree.put(ctx, typeName + storage + " " + id);
     }
 
+
+    @Override
+    public void exitStructDefinition(StructDefinitionContext ctx) {
+        String struct = "구조체";
+
+        int varDeclCount = ctx.variableDeclaration().size();
+        StringBuilder varDecl = new StringBuilder();
+
+        indent++;
+        for (VariableDeclarationContext c : ctx.variableDeclaration()) {
+            varDecl.append("\n").append(printIndent());
+            varDecl.append(strTree.get(c));
+            varDecl.append(";");
+        }
+        indent--;
+
+        strTree.put(ctx, struct + " {" + varDecl + "\n" + printIndent() + "}");
+    }
+
+    // todo 이거 뭔데??
+    @Override
+    public void exitUsingForDeclaration(UsingForDeclarationContext ctx) {
+        strTree.put(ctx, "TODOTODOTODOTODO : using for declaration이 뭐임..?");
+    }
 
     @Override
     public void exitReturnStatement(SolidityParser.ReturnStatementContext ctx) {
