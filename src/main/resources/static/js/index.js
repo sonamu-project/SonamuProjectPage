@@ -38,7 +38,13 @@ $(function(){
         } else {
             alert("저장할 파일의 이름을 입력하세요!");
         }
-    })
+    });
+
+    // Form 버튼 클릭 시 자식 페이지 열기
+    $("#formView").click(function() {
+        let child = window.open("formView.html", "_blank",
+            "height=600, width=400");
+    });
 
     // inputText에 코드 입력 시 textarea 크기 자동 조절
     // $("#inputText").on('propertychange change keyup paste input', function () {

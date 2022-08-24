@@ -23,18 +23,18 @@ public class TranslateController {
     @PostMapping("/translateSonamu")
     public String translateSonamu(Model model, SourceCode sourceCode) throws FileNotFoundException, UnsupportedEncodingException {
         String output = translateService.translate(sourceCode);
-        model.addAttribute("source", sourceCode.getCode());
-        model.addAttribute("target", output);
+        model.addAttribute("solidity", sourceCode.getCode());
+        model.addAttribute("sonamu", output);
 
         return "index";
     }
 
-    @PostMapping("/translateSolidity")
-    public String translateSolidity(Model model, SourceCode sourceCode) throws FileNotFoundException, UnsupportedEncodingException {
-        String output = translateService.translate(sourceCode);
-        model.addAttribute("target", sourceCode.getCode());
-        model.addAttribute("source", output);
-
-        return "index";
-    }
+//    @PostMapping("/translateSolidity")
+//    public String translateSolidity(Model model, SourceCode sourceCode) throws FileNotFoundException, UnsupportedEncodingException {
+//        String output = translateService.translate(sourceCode);
+//        model.addAttribute("sonamu", sourceCode.getCode());
+//        model.addAttribute("solidity", output);
+//
+//        return "index";
+//    }
 }
