@@ -74,7 +74,7 @@ public class ErrorHandler {
         }
 
         private void notifyListener(Object string) {
-            throw new RuntimeException("test");
+            throw new RuntimeException("test-html");
         }
     }
 }
