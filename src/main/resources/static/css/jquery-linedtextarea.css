@@ -28,11 +28,13 @@
 
 .lined {
 	width:85% !important;
-	height:350px !important;
+	height:650px !important;
 }
-.lined::-webkit-scrollbar {
-	display: none;
-}
+
+/*.lined::-webkit-scrollbar {*/
+/*	display: none;*/
+/*}*/
+
 .linedtextarea {
 	padding: 0px;
 	margin: 0px;
@@ -56,7 +58,7 @@
 	float: left;
 	overflow: hidden;
 	border-right: 1px solid #c0c0c0;
-	margin-right: 10px;
+	margin-right: 0px;
 }
 
 .linedwrap .codelines {
