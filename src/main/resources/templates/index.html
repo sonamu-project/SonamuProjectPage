@@ -19,12 +19,11 @@
 <div class="main-container">
     <div class="temp-box box-headline">
         <a style="color:black !important;" class="text-decoration-none" href="./">
-            <img width="123" height="34" class="" src="http://img.segye.com/content/image/2018/03/22/20180322522482.jpg" alt="소나무 logo">
+            <img width="270" height="100" class="" src="https://github.com/sonamu-project/SonamuProjectWeb/blob/master/src/main/resources/images/Sonamu_logo.png?raw=true" alt="소나무 logo">
         </a>
-        <p>소나무언어 Viewer를 비롯한 기능들로 스마트컨트랙트를 쉽게 사용할 수 있도록 도와줍니다.</p>
     </div>
     <div class="temp-box box-loading">
-        <h3>코드 불러오기</h3>
+        <h3>불러오기</h3>
         <div class="col">
             <input id="openCode" type="file" accept=".sol" class="form-control"/>
         </div>
@@ -48,19 +47,24 @@
         <h3>Solidity</h3>
     </div>
     <div class="temp-box box-formButton">
-        <button class="form-control border-success" id="formView" type="submit">Form</button>
+        <h3> &nbsp <h3>
+        <div class="col">
+            <button class="form-control border-success" id="formView" type="submit">Form</button>
+        </div>
+
     </div>
 
     <div class="temp-box box-translate">
         <form id="translateFormSonamu" th:action="@{/translateSonamu}" method="post">
-            <div class="form-button">
-                <input type="hidden" name="typeOfCode" value="solidity"/>
-                <button class="form-control border-success" type="submit">소나무언어로 확인하기</button>
-            </div>
+
             <div class="Solidity-row-3" style="border:1px;height:91%;">
                 <p><textarea class="lined" type="text" name="code"
                              placeholder="번역할 코드를 입력하세요. "
                              th:utext="${solidity}" id="solidity"></textarea></p>
+            </div>
+            <div class="box-view">
+                <input type="hidden" name="typeOfCode" value="solidity"/>
+                <button class="form-control border-success" type="submit">소나무언어로 확인하기</button>
             </div>
         </form>
     </div>
