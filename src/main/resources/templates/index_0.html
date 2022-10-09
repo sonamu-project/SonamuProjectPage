@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8">
+  <title>home</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Yeon+Sung&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/project.css">
+  <link rel="stylesheet" href="/css/jquery-linedtextarea.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+        integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor"
+        crossorigin="anonymous">
+</head>
+
+<body>
+<div class="main-container">
+  <div class="temp-box box-headline">
+    <a style="color:black !important;" class="text-decoration-none" href="./">
+      <img width="270" height="100" class="" src="https://github.com/sonamu-project/SonamuProjectWeb/blob/master/src/main/resources/images/Sonamu_logo.png?raw=true" alt="소나무 logo">
+    </a>
+  </div>
+  <div class="temp-box box-loading">
+    <h3>불러오기</h3>
+    <div class="col">
+      <input id="openCode" type="file" accept=".sol" class="form-control"/>
+    </div>
+  </div>
+  <div class="temp-box box-save">
+    <h3>코드 저장하기</h3>
+    <div class="row">
+      <div class="col input-box">
+        <input id="fileName" placeholder="다운 받을 파일 이름 지정" class="form-control"/>
+        <span class="extension">.sol</span>
+      </div>
+      <div class="col">
+        <button id="saveCode" class="form-control border-success">파일 다운로드</button>
+      </div>
+    </div>
+  </div>
+  <div class="temp-box box-line">
+    <hr class="bg-danger border-2 border-top border-secondary w-100">
+  </div>
+  <div class="temp-box box-solidity">
+    <h3>Solidity</h3>
+  </div>
+  <div class="temp-box box-formButton">
+    <h3> &nbsp <h3>
+      <div class="col">
+        <button class="form-control border-success" id="formView" type="submit">Form</button>
+      </div>
+
+  </div>
+
+  <div class="temp-box box-translate">
+    <form id="translateFormSonamu" th:action="@{/translateSonamu}" method="post">
+
+      <div class="Solidity-row-3" style="border:1px;height:91%;">
+        <p><textarea class="lined" type="text" name="code"
+                     placeholder="번역할 코드를 입력하세요. "
+                     th:utext="${solidity}" id="solidity"></textarea></p>
+      </div>
+      <div class="box-view">
+        <input type="hidden" name="typeOfCode" value="solidity"/>
+        <button class="form-control border-success" type="submit">소나무언어로 확인하기</button>
+      </div>
+    </form>
+  </div>
+
+
+
+  <div class="temp-box box-sonamu">
+    <h3>Sonamu</h3>
+  </div>
+  <div class="temp-box box-sonamuText">
+    <p><textarea class="lined" type="text" name="code" placeholder="소나무언어로 확인하기"
+                 th:text="${sonamu}"></textarea></p>
+  </div>
+</div>
+<script src="http://code.jquery.com/jquery-latest.js"></script>
+<script type="text/javascript" src="/js/index.js"></script>
+<script type="text/javascript" src="/js/jquery-linedtextarea.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2"
+        crossorigin="anonymous"></script>
+</body>
+</body>
+</html>
