@@ -230,6 +230,7 @@ public class SonamuPreprocessor extends SolidityBaseListener implements ParseTre
     // numberLiteral
     //  : (DecimalNumber | HexNumber) NumberUnit? ;
 
+
     @Override
     public void exitNumberLiteral(SolidityParser.NumberLiteralContext ctx) {
         String s1 = ctx.getChild(0).getText();
@@ -357,14 +358,11 @@ public class SonamuPreprocessor extends SolidityBaseListener implements ParseTre
     }
 
     @Override
+    // `mapping(address => uint) mapA` -> `address와 unit가 한 쌍인 mapA를 선언`
     public void exitMapping(SolidityParser.MappingContext ctx) {
-//        String s1 = "짝꿍"; // 'mapping' -> "짝꿍"
-        String s2 = ctx.getChild(1).getText(); // '('
-        String s3 = ctx.getChild(3).getText(); // '=>'
-        String s4 = ctx.getChild(5).getText(); // ')'
         String elementaryTypeName = strTree.get(ctx.elementaryTypeName());
         String typeName = strTree.get(ctx.typeName());
-        strTree.put(ctx, "한쌍 " + s2 + elementaryTypeName + ", " + typeName + s4);
+        strTree.put(ctx, "(" + elementaryTypeName + "와 " + typeName + ")가 한 쌍인");
     }
 
     @Override
@@ -412,7 +410,7 @@ public class SonamuPreprocessor extends SolidityBaseListener implements ParseTre
         } else if (ctx.getChild(0).getText().equals("view")) {
             keyword = ":읽기전용";
         } else if (ctx.getChild(0).getText().equals("payable")) {
-            keyword = ":지불가능";
+            keyword = " 지불가능한";
         }
         strTree.put(ctx, keyword);
     }
@@ -503,16 +501,32 @@ public class SonamuPreprocessor extends SolidityBaseListener implements ParseTre
             contract.append("\n" + printIndent() + "상속 계약서 : ").append(inheritanceSpecifierPart);
         }
 
-        int countContractPart = ctx.contractPart().size();
-        for (int i = 0; i < countContractPart; i++) {
-            contractPart += strTree.get(ctx.contractPart(i));
+        String stateVariableDeclaration = "";
+        String eventDefinition = "";
+
+        // ContractPart
+        for (int i = 0; i < ctx.contractPart().size(); i++) {
+            if (ctx.contractPart(i).getChild(0) instanceof SolidityParser.StateVariableDeclarationContext) {
+                stateVariableDeclaration += strTree.get(ctx.contractPart(i));
+            }
+            else if (ctx.contractPart(i).getChild(0) instanceof SolidityParser.EventDefinitionContext) {
+                eventDefinition += strTree.get(ctx.contractPart(i));
+            }
+            else {
+                contractPart += strTree.get(ctx.contractPart(i));
+            }
         }
-        contract.append("\n" + printIndent() + "내용 : {").append(contractPart + "\n}");
-        contract.append("\n" + printIndent()).append(endDefinition + "\n");
+        contract.append("\n").append(printIndent())
+            .append("선언부 : {")
+            .append(stateVariableDeclaration)
+            .append("\n")
+            .append(eventDefinition).append("\n}");
+        contract.append("\n").append(printIndent()).append("내용 : {").append(contractPart).append("\n}");
+        contract.append("\n").append(printIndent()).append(endDefinition).append("\n");
         strTree.put(ctx, contract.toString());
     }
 
-    // tod
+    // todo
     // 2. block indentation 어떻게 처리할지 논의하기
     // 2-1. ContractDefinition -> ContractPart 들어갈 때 indent
     // 2-2. ContractPart 아래의 각 노드에서 'block' 노드로 들어갈 때 indent
@@ -683,7 +697,7 @@ public class SonamuPreprocessor extends SolidityBaseListener implements ParseTre
             if (ctx.getChild(i) instanceof SolidityParser.ModifierInvocationContext || ctx.getChild(
                     i) instanceof SolidityParser.StateMutabilityContext) {
                 if ((ctx.getChild(i).getText()).equals("payable")) {
-                    result += ":지불가능";
+                    result += " 지불가능한";
                 } else {
                     result += strTree.get(ctx.getChild(i));
                 }
@@ -691,15 +705,15 @@ public class SonamuPreprocessor extends SolidityBaseListener implements ParseTre
             // ExternalKeyword | PublicKeyword | InternalKeyword | PrivateKeyword -> : 외부용 | : 공용 | : 개인용 | : 상속자용 으로 변경
             else {
                 // 소나무언어에 public/private 여부 공개하지 않기로 변경
-                if ((ctx.getChild(i).getText()).equals("public")) {
+//                if ((ctx.getChild(i).getText()).equals("public")) {
 //                    result += ":공용";
-                } else if ((ctx.getChild(i).getText()).equals("external")) {
+//                } else if ((ctx.getChild(i).getText()).equals("external")) {
 //                    result += ":외부용";
-                } else if ((ctx.getChild(i).getText()).equals("internal")) {
+//                } else if ((ctx.getChild(i).getText()).equals("internal")) {
 //                    result += ":상속용";
-                } else if ((ctx.getChild(i).getText()).equals("private")) {
+//                } else if ((ctx.getChild(i).getText()).equals("private")) {
 //                    result += ":개인용";
-                }
+//                }
             }
             // 키워드 다음 공백 추가
             if (i < count - 1) {
@@ -765,9 +779,9 @@ public class SonamuPreprocessor extends SolidityBaseListener implements ParseTre
         id = strTree.get(ctx.identifier());
         if (ctx.expression() != null) {
             expr = " = " + strTree.get(ctx.expression());
-            strTree.put(ctx, typeName + " " + id + keyword + expr + ";");
+            strTree.put(ctx, typeName + " " + id + keyword + expr + " 선언");
         } else {
-            strTree.put(ctx, typeName + " " + id + keyword + ";");
+            strTree.put(ctx, typeName + " " + id + keyword + " 선언");
         }
     }
 
@@ -943,7 +957,7 @@ public class SonamuPreprocessor extends SolidityBaseListener implements ParseTre
             storage = " " + strTree.get(ctx.storageLocation());
         }
         String id = strTree.get(ctx.identifier());
-        strTree.put(ctx, typeName + storage + " " + id);
+        strTree.put(ctx, typeName + storage + " " + id + " 선언");
     }
 
 
