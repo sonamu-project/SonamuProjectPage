@@ -9,14 +9,21 @@ import com.example.SonamuProject.preprocessor.generated.SolidityParser.VariableD
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 import org.antlr.v4.runtime.tree.ParseTreeProperty;
 
+<<<<<<< Updated upstream
+=======
+import java.util.HashMap;
+
+/**
+ * Solidity를 받아 Sonamu를 반환하는 Listener
+ */
+>>>>>>> Stashed changes
 public class SonamuPreprocessor extends SolidityBaseListener implements ParseTreeListener {
 
     private String output;
 
     ParseTreeProperty<String> strTree = new ParseTreeProperty<>(); // String으로 tree를 만들어주는 객체
-    int indent = 0;
-
-    // indent 값만큼 \t 추가
+    int indent = 0; // indent 값만큼 \t 추가
+    HashMap<String, String> mapping = new HashMap<>();
     public String printIndent() {
         StringBuilder result = new StringBuilder();
         for (int i = 0; i < indent; i++) {
@@ -114,44 +121,131 @@ public class SonamuPreprocessor extends SolidityBaseListener implements ParseTre
         // Expression이 PrimaryExpression인 경우
         if (ctx.primaryExpression() != null) {
             strTree.put(ctx, strTree.get(ctx.primaryExpression()));
+        } else if(ctx.Msg() != null){
+            if(ctx.getChild(0).getText().equals("msg.sender"))
+                strTree.put(ctx, "실행자");
+            else if(ctx.getChild(0).getText().equals("msg.value"))
+                strTree.put(ctx, "코인값");
         } else {
             // PrimaryExpression외에는 nodeCount에 따라 분리
             int nodeCount = ctx.getChildCount();
-            String expr1 = "", expr2 = "", op = "";
+            String expr1 = "", expr2 = "", op = "", op2 = "";
 
             switch (nodeCount) {
                 case 2:
                     // 'new' typeName
                     if (ctx.typeName() != null) {
                         expr1 = strTree.get(ctx.typeName());
-                        strTree.put(ctx, "생성" + expr1);
+                        strTree.put(ctx, "새로운 '" + expr1 + "'");
                     }
                     // expression '++' | expression '--'
-                    else if (ctx.getChild(0).equals(ctx.expression(0))) {
-                        expr1 = strTree.get(ctx.expression(0));
-                        op = ctx.getChild(1).getText();
+                    else {
+                        expr1 = "\"" + strTree.get(ctx.expression(0)) + "\"";
+                        if(ctx.getChild(0).getText() == "++" || ctx.getChild(1).getText() == "++")
+                            op = " 1만큼 증가한다.";
+                        else
+                            op = " 1만큼 감소한다.";
                         strTree.put(ctx, expr1 + op);
-                    } else {
-                        expr1 = strTree.get(ctx.expression(0));
-                        op = ctx.getChild(0).getText();
-                        strTree.put(ctx, op + expr1);
+                        /*if (ctx.getChild(0).equals(ctx.expression(0))) {
+                            op = ctx.getChild(1).getText();
+                            strTree.put(ctx, expr1 + op);
+                        } else {
+                            op = ctx.getChild(0).getText();
+                            strTree.put(ctx, op + expr1);
+                        }*/
                     }
                     break;
                 case 3:
                     // expression '.' identifier
                     if (ctx.getChild(0).getText().equals("(")) {
                         expr1 = strTree.get(ctx.expression(0));
-                        strTree.put(ctx, "(" + expr1 + ")");
+                        strTree.put(ctx, "('" + expr1 + "')");
                     } else if (ctx.identifier() != null) {
-                        expr1 = strTree.get(ctx.expression(0));
-                        expr2 = strTree.get(ctx.identifier());
+                        expr1 = "'" + strTree.get(ctx.expression(0)) + "'";
+                        expr2 = "'" + strTree.get(ctx.identifier()) + "'";
                         op = ".";
                         strTree.put(ctx, expr1 + op + expr2);
                     } else {
-                        expr1 = strTree.get(ctx.expression(0));
-                        expr2 = strTree.get(ctx.expression(1));
-                        op = ctx.getChild(1).getText();
-                        strTree.put(ctx, expr1 + " " + op + " " + expr2);
+                        expr1 = "'" + strTree.get(ctx.expression(0)) + "'";
+                        expr2 = "'" + strTree.get(ctx.expression(1)) + "'";
+                        switch (ctx.getChild(1).getText()) {
+                            case "**":
+                                break;
+                            case "%":
+                                op = " 를 ";
+                                op2 = " 로 나눈 나머지";
+                                strTree.put(ctx, expr1 + op + expr2 + op2);
+                                break;
+                            case "<<":
+                                break;
+                            case ">>":
+                                break;
+                            case "&":
+                                break;
+                            case "^":
+                                break;
+                            case "|":
+                                break;
+                            case "==":
+                                op = " 와 ";
+                                op2 = " 가 같다.";
+                                strTree.put(ctx, expr1 + op + expr2 + op2);
+                                break;
+                            case "!=":
+                                break;
+                            case "&&":
+                                break;
+                            case "||":
+                                break;
+                            case "=":
+                                if(expr2.equals("'빈 지갑 주소'"))
+                                    strTree.put(ctx, expr1 + "의 주소를 초기화한다.");
+                                else {
+                                    op = " 를 @로 변경한다. ";
+                                    strTree.put(ctx, expr1 + op + "(@ = " + expr2 + ")");
+                                }
+                                break;
+                            case "|=":
+                                break;
+                            case "^=":
+                                break;
+                            case "&=":
+                                break;
+                            case "<<=":
+                                break;
+                            case ">>=":
+                                break;
+                            case "+=":
+                                op = " 가 ";
+                                op2 = " 증가한다.";
+                                strTree.put(ctx, expr1 + op + expr2 + op2);
+                                break;
+                            case "-=":
+                                op = " 가 ";
+                                op2 = " 감소한다.";
+                                strTree.put(ctx, expr1 + op + expr2 + op2);
+                                break;
+                            case "*=":
+                                op = " 를 ";
+                                op2 = " 배한다.";
+                                strTree.put(ctx, expr1 + op + expr2 + op2);
+                                break;
+                            case "/=":
+                                op = " 를 ";
+                                op2 = " 로 나눈다.";
+                                strTree.put(ctx, expr1 + op + expr2 + op2);
+                                break;
+                            case "%=":
+                                op = " 를 ";
+                                op2 = " 로 나눈 나머지로 변경한다.";
+                                strTree.put(ctx, expr1 + op + expr2 + op2);
+                                break;
+                            default:
+                                op = ctx.getChild(1).getText();
+                                strTree.put(ctx, expr1 + " " + op + " " + expr2);
+                        }
+//                        op = ctx.getChild(1).getText();
+//                        strTree.put(ctx, expr1 + " " + op + " " + expr2);
                     }
                     break;
                 case 4:
@@ -162,7 +256,10 @@ public class SonamuPreprocessor extends SolidityBaseListener implements ParseTre
                     } else {
                         expr1 = strTree.get(ctx.expression(0));
                         expr2 = strTree.get(ctx.expression(1));
-                        strTree.put(ctx, "배열 '" + expr1 + "'의 '" + expr2 + "'번째 값");
+                        if(mapping.get(expr1) != null)
+                            strTree.put(ctx, "'" + expr2 + "' 계좌의 '" + expr1 + "' 값");
+                        else
+                            strTree.put(ctx, "배열 '" + expr1 + "'의 '" + expr2 + "'번째 값");
                     }
                     break;
                 default:
@@ -469,17 +566,16 @@ public class SonamuPreprocessor extends SolidityBaseListener implements ParseTre
         // TODO) 인터페이스와 라이브러리 다른 한글 키워드로 변경
         // contract
         if ((ctx.getChild(indexOfKindOf).getText()).equals("contract"))
-            startDefinition = "------ <계약서 ";
+            startDefinition = "[계약서 ";
             // interface
         else if ((ctx.getChild(indexOfKindOf).getText()).equals("interface"))
-            startDefinition = "------ <상속용 계약서 ";
+            startDefinition = "[상속용 계약서 ";
             // library
         else
-            startDefinition = "------ <재사용 계약서 ";
+            startDefinition = "[재사용 계약서 ";
         // 이름
         identifier = strTree.get(ctx.identifier());
-        endDefinition = startDefinition + identifier + " 닫음> ------";
-        startDefinition += identifier + "> ------";
+        startDefinition += identifier + "]";
         contract.append("\n" + startDefinition);
         contract.append(printIndent()).append(natSpec);
 
@@ -498,8 +594,17 @@ public class SonamuPreprocessor extends SolidityBaseListener implements ParseTre
         for (int i = 0; i < countContractPart; i++) {
             contractPart += strTree.get(ctx.contractPart(i));
         }
+<<<<<<< Updated upstream
         contract.append("\n" + printIndent() + "내용 : {").append(contractPart + "\n}");
         contract.append("\n" + printIndent()).append(endDefinition + "\n");
+=======
+        contract.append("\n").append(printIndent())
+            .append("선언부 : {")
+            .append(stateVariableDeclaration)
+            .append("\n")
+            .append(eventDefinition).append("\n}");
+        contract.append("\n").append(printIndent()).append("내용 : {").append(contractPart).append("\n}");
+>>>>>>> Stashed changes
         strTree.put(ctx, contract.toString());
     }
 
@@ -593,16 +698,16 @@ public class SonamuPreprocessor extends SolidityBaseListener implements ParseTre
 
     @Override
     public void enterBlock(SolidityParser.BlockContext ctx) {
-        indent++;
+        //indent++;
     }
 
     // block
     @Override
     public void exitBlock(SolidityParser.BlockContext ctx) {
-        indent--;
+//        indent--;
         int count = ctx.statement().size();
-        String start = ctx.getChild(0).getText(); // '{'
-        String end = ctx.getChild(ctx.getChildCount() - 1).getText(); // '}'
+/*        String start = ctx.getChild(0).getText(); // '{'
+        String end = ctx.getChild(ctx.getChildCount() - 1).getText(); // '}'*/
         String mid = "";  // stmt
         if (count >= 1) {
             mid = "\n" + strTree.get(ctx.statement(0)) + "\n";
@@ -611,7 +716,7 @@ public class SonamuPreprocessor extends SolidityBaseListener implements ParseTre
             mid += strTree.get(ctx.statement(i));
             mid += "\n";
         }
-        strTree.put(ctx, start + mid + printIndent() + end);
+        strTree.put(ctx, mid + printIndent());
     }
 
     // eventParmeterList
@@ -734,7 +839,6 @@ public class SonamuPreprocessor extends SolidityBaseListener implements ParseTre
             SolidityParser.StateVariableDeclarationContext ctx) {
         int childNum = ctx.getChildCount();
         String typeName = strTree.get(ctx.typeName());
-        String keyword = "";
         String id = "";
         String expr = "";
         for (int i = 1; i < childNum; i++) {
@@ -752,18 +856,28 @@ public class SonamuPreprocessor extends SolidityBaseListener implements ParseTre
         }
 
         id = strTree.get(ctx.identifier());
+        if(ctx.typeName().mapping() != null) {
+            String elementType = strTree.get(ctx.typeName().mapping().elementaryTypeName());
+            mapping.put(id, elementType);
+        }
         if (ctx.expression() != null) {
             expr = " = " + strTree.get(ctx.expression());
+<<<<<<< Updated upstream
             strTree.put(ctx, typeName + " " + id + keyword + expr + ";");
         } else {
             strTree.put(ctx, typeName + " " + id + keyword + ";");
+=======
+            strTree.put(ctx, typeName + " " + id + expr + " 선언");
+        } else {
+            strTree.put(ctx, typeName + " " + id + " 선언");
+>>>>>>> Stashed changes
         }
     }
 
     @Override
     // natSpec? 'function' identifier? parameterList modifierList returnParameters? ( ';' | block ) ;
     public void exitFunctionDefinition(SolidityParser.FunctionDefinitionContext ctx) {
-        String functionDescription = "====== <계약내용";
+        String functionDescription = "[계약내용";
         String natSpec = "";
         StringBuilder func_sb = new StringBuilder();
         // natSpec -> docs
@@ -775,29 +889,38 @@ public class SonamuPreprocessor extends SolidityBaseListener implements ParseTre
         if (ctx.identifier() != null) {
             functionDescription += " " + strTree.get(ctx.identifier());
         }
-        String endFunctionDescription = functionDescription + " 닫음> ======";
-        functionDescription += "> ======";
+        functionDescription += "]";
 
         // 함수명 추가
         func_sb.append(functionDescription);
 
         // natspec 추가
-        func_sb.append(printIndent()).append(natSpec);
+        if(!natSpec.equals(""))
+            func_sb.append(printIndent()).append(natSpec);
 
         // 파라미터, 반환 값, 본문 추가
+<<<<<<< Updated upstream
         func_sb.append("\n" + printIndent() + "필요한 값 : ")
                 .append(strTree.get(ctx.parameterList()));
         if (ctx.returnParameters() != null) {
             func_sb.append("\n" + printIndent() + "예상 결과 값 : ")
                     .append(strTree.get(ctx.returnParameters()));
         }
+=======
+//        func_sb.append("\n" + printIndent() + "필요한 값 : ")
+//                .append(strTree.get(ctx.parameterList()));
+        // 반환 값 번역 하지 않음
+//        if (ctx.returnParameters() != null) {
+//            func_sb.append("\n" + printIndent() + "예상 결과 값 : ")
+//                    .append(strTree.get(ctx.returnParameters()));
+//        }
+>>>>>>> Stashed changes
         if (ctx.block() != null) {
-            func_sb.append("\n" + printIndent() + "본문 : ").append(" " + strTree.get(ctx.block()));
+            func_sb.append(strTree.get(ctx.block()));
         } else {
             func_sb.append(";");
         }
 
-        func_sb.append("\n" + printIndent()).append(endFunctionDescription + "\n");
         strTree.put(ctx, func_sb.toString());
     }
 
@@ -931,7 +1054,15 @@ public class SonamuPreprocessor extends SolidityBaseListener implements ParseTre
             storage = " " + strTree.get(ctx.storageLocation());
         }
         String id = strTree.get(ctx.identifier());
+<<<<<<< Updated upstream
         strTree.put(ctx, typeName + storage + " " + id);
+=======
+        if(ctx.typeName().mapping() != null){
+            String elementType = strTree.get(ctx.typeName().mapping().elementaryTypeName());
+            mapping.put(id, elementType);
+        }
+        strTree.put(ctx, typeName + storage + " " + id + " 선언");
+>>>>>>> Stashed changes
     }
 
 
@@ -965,17 +1096,47 @@ public class SonamuPreprocessor extends SolidityBaseListener implements ParseTre
         String return_msg = "블럭 종료";
         String expr = "";
         if (ctx.expression() != null) {
+<<<<<<< Updated upstream
             expr = strTree.get(ctx.expression());
             return_msg = "을/를 반환";
+=======
+            expr = strTree.get(ctx.expression()).replaceAll(" ","");
+            if (expr.equals("참"))
+                strTree.put(ctx, "계속해서 계약 진행");
+            else if(expr.equals("거짓"))
+                strTree.put(ctx, "계약 종료");
+            else
+                strTree.put(ctx, expr + return_msg);
+>>>>>>> Stashed changes
         }
-        strTree.put(ctx, expr + return_msg + ";");
     }
 
     @Override
     public void exitEmitStatement(SolidityParser.EmitStatementContext ctx) {
+<<<<<<< Updated upstream
         String emit_smn = "기록하다";
+=======
+        String emit_smn = " 값을 로그로 남긴다.";
         String funcCall = strTree.get(ctx.functionCall());
-        strTree.put(ctx, funcCall + emit_smn + ";");
+        String func[] = funcCall.split("\\( ");
+        String funcName = func[0];
+        String funcParam = func[1];
+        String parameter[] = funcParam.split(",");
+
+
+        String paramResult = "\""+parameter[0]+"\"";
+        for (int i = 1; i<parameter.length;i++) {
+            paramResult += ",";
+            paramResult += "\""+parameter[i]+"\"";
+        }
+        paramResult = paramResult.replaceAll("\\)","");
+        paramResult = paramResult.replaceAll(" ","");
+        strTree.put(ctx, "\"" + funcName +"\" 의 " +paramResult + emit_smn);
+
+        /*String emit_smn = " 를 기록";
+>>>>>>> Stashed changes
+        String funcCall = strTree.get(ctx.functionCall());
+        strTree.put(ctx, funcCall + emit_smn + ";");*/
     }
 
     @Override
@@ -1038,10 +1199,10 @@ public class SonamuPreprocessor extends SolidityBaseListener implements ParseTre
 
     @Override
     public void exitRequireStatement(SolidityParser.RequireStatementContext ctx) {
-        String require_snm = "실행조건";
+        String require_snm = " 일 때 계약을 진행한다.";
         String exprList = strTree.get(ctx.expressionList());
 
-        strTree.put(ctx, require_snm + " (" + exprList + ");");
+        strTree.put(ctx, "'" + exprList + "'" + require_snm);
     }
 
     @Override
