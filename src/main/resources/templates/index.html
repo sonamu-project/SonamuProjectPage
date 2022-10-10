@@ -9,9 +9,11 @@
     <link href="https://fonts.googleapis.com/css2?family=Yeon+Sung&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/project.css">
     <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../static/css/project.css">
 </head>
 <body>
 
+<!--nav bar-->
 <nav class="navbar navbar-expand-md navbar-dark bg-dark mb-4">
     <div class="container-fluid">
         <a class="navbar-brand" href="/">
@@ -35,7 +37,7 @@
 
 <main class="container">
     <div class="mx-auto">
-        <div class="row">
+        <div class="row main-row">
             <!-- solidity -->
             <div class="col-md border border-2 rounded textarea-col">
                 <form id="translateFormSonamu" th:action="@{/translateSonamu}" method="post">
@@ -47,13 +49,10 @@
                               th:text="${solidity}" id="solidity"></textarea>
                     <hr>
                     <div class="solidity-button row">
-                        <button id="loadCode" class="col btn btn-link">불러오기</button>
-                        <button id="saveCode" class="col btn btn-link">저장하기</button>
-                        <button id="toForm" class="col btn btn-link">폼으로 보기</button>
-                    </div>
-                    <hr>
-                    <div class="solidity-button">
-                        <button id="translate" type="submit" class="col-12 btn btn-link">번역</button>
+                        <button id="loadCode" class="col btn btn-link"><img src="/images/upload_icon.png" alt="불러오기" width="30" height="30"></button>
+                        <button id="saveCode" class="col btn btn-link"><img src="/images/save_icon.png" width="30" height="30"></button>
+                        <button id="toForm" class="col btn btn-link"><img src="/images/form_icon.png" width="30" height="30"></button>
+                        <button id="translate" type="submit" class="col-7 btn btn-link"><img src="/images/translate_icon.png" width="40" height="40"></button>
                     </div>
                 </form>
             </div>
