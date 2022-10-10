@@ -2,9 +2,30 @@ body {
     /*font-family: 'Yeon Sung', cursive !important;*/
 }
 
+.form-label {
+    font-weight: 300;
+}
+
+.icon {
+
+}
+
+.main-row {
+    margin-top: 70px !important;
+}
+
 textarea {
     border: 0 !important;
     resize: none !important;
+}
+
+.vertical_line {
+    border-left: 1px solid green;
+}
+
+.form-control {
+    font-size:1.1rem !important;
+    height: 300px;
 }
 
 .form-control:focus {
@@ -21,7 +42,7 @@ textarea:focus {
 }
 
 label {
-    margin: 12px 12px 5px 12px !important;
+    margin: 12px 12px 5px 23px !important;
     font-size: 25px;
 }
 
@@ -35,7 +56,7 @@ hr{
 }
 
 .solidity-button{
-    margin: 0px;
+    margin: 0 10px 0 !important;
 }
 
 button {
