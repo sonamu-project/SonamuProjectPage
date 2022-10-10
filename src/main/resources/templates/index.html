@@ -40,7 +40,7 @@
         <div class="row main-row">
             <!-- solidity -->
             <div class="col-md border border-2 rounded textarea-col">
-                <form id="translateFormSonamu" th:action="@{/translateSonamu}" method="post">
+                <form id="translateFormSonamu" method="post">
                     <input type="hidden" name="typeOfCode" value="solidity"/>
                     <label for="solidity" class="form-label">Solidity</label>
                     <hr>
@@ -49,7 +49,7 @@
                               th:text="${solidity}" id="solidity"></textarea>
                     <hr>
                     <div class="solidity-button row">
-                        <button id="loadCode" class="col btn btn-link"><img src="/images/upload_icon.png" alt="불러오기" width="30" height="30"></button>
+                        <button id="loadCode" onClick="openFile()" class="col btn btn-link"><img src="/images/upload_icon.png" alt="불러오기" width="30" height="30"></button>
                         <button id="saveCode" class="col btn btn-link"><img src="/images/save_icon.png" width="30" height="30"></button>
                         <button id="toForm" class="col btn btn-link"><img src="/images/form_icon.png" width="30" height="30"></button>
                         <button id="translate" type="submit" class="col-7 btn btn-link"><img src="/images/translate_icon.png" width="40" height="40"></button>

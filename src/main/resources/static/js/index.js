@@ -1,7 +1,7 @@
 $(function(){
 
     // 파일 불러오기 onChange event
-    $("#openCode").change(function() {
+    $("#openCode").click(function() {
         const content = $("#solidity");
         const file = this.files[0];
         const reader = new FileReader();
@@ -34,6 +34,10 @@ $(function(){
     });
 });
 
+function openFile() {
+    let $input = $('<input id="openCode" type="file" accept=".sol" class="form-control"/>');
+    $input.click();
+}
 
 function downloadFile(fileName, content) {
 
