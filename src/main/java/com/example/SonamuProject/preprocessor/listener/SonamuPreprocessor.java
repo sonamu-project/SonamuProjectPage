@@ -122,6 +122,7 @@ public class SonamuPreprocessor extends SolidityBaseListener implements ParseTre
             int nodeCount = ctx.getChildCount();
             String expr1 = "", expr2 = "", op = "";
 
+
             switch (nodeCount) {
                 case 2:
                     // 'new' typeName
@@ -153,6 +154,11 @@ public class SonamuPreprocessor extends SolidityBaseListener implements ParseTre
                     } else {
                         expr1 = strTree.get(ctx.expression(0));
                         expr2 = strTree.get(ctx.expression(1));
+
+                        if(expr2=="빈 지갑 주소"){
+                            strTree.put(ctx, expr1+"의 주소를 초기화한다.");
+                            break;
+                        }
                         op = ctx.getChild(1).getText();
                         strTree.put(ctx, expr1 + " " + op + " " + expr2);
                     }
@@ -162,7 +168,7 @@ public class SonamuPreprocessor extends SolidityBaseListener implements ParseTre
                         expr1 = strTree.get(ctx.expression(0));
                         expr2 = strTree.get(ctx.functionCallArguments());
                         strTree.put(ctx, expr1 + "(" + expr2 + ")");
-                        // 지갑주소(0) 예외 처리
+                        //지갑주소(0) 예외 처리
                         if (ctx.expression(0).getText().equals("address")) {
                             if (strTree.get(ctx.functionCallArguments()).equals("0")) {
                                 strTree.put(ctx, "빈 지갑 주소");
@@ -978,16 +984,37 @@ public class SonamuPreprocessor extends SolidityBaseListener implements ParseTre
         String expr = "";
         if (ctx.expression() != null) {
             expr = strTree.get(ctx.expression());
-            return_msg = " 반환";
+            expr = expr.replaceAll(" ","");
+            if (expr == "참"){
+                strTree.put(ctx, "계속해서 계약 진행");
+                return;
+            }else{
+                strTree.put(ctx, "계약 종료");
+                return;
+            }
+
         }
         strTree.put(ctx, expr + return_msg + ";");
     }
 
     @Override
     public void exitEmitStatement(SolidityParser.EmitStatementContext ctx) {
-        String emit_smn = " 를 기록";
+        String emit_smn = " 값을 로그로 남긴다.";
         String funcCall = strTree.get(ctx.functionCall());
-        strTree.put(ctx, funcCall + emit_smn + ";");
+        String func[] = funcCall.split("\\( ");
+        String funcName = func[0];
+        String funcParm = func[1];
+        String parameter[] = funcParm.split(",");
+
+
+        String paramResult = "\""+parameter[0]+"\"";
+        for (int i = 1; i<parameter.length;i++) {
+            paramResult += ",";
+            paramResult += "\""+parameter[i]+"\"";
+        }
+        paramResult = paramResult.replaceAll("\\)","");
+        paramResult = paramResult.replaceAll(" ","");
+        strTree.put(ctx, "\"" + funcName +"\" 의 " +paramResult + emit_smn);
     }
 
     @Override
