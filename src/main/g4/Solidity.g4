@@ -239,7 +239,8 @@ Ufixed
   : 'ufixed' | ( 'ufixed' [0-9]+ 'x' [0-9]+ ) ;
 
 expression
-  : expression '++'
+  : Msg
+  | expression '++'
   | expression '--'
   | 'new' typeName
   | expression '[' expression ']'
@@ -402,6 +403,9 @@ identifier
 
 VersionLiteral
   : [0-9]+ '.' [0-9]+ '.' [0-9]+ ;
+
+Msg
+  : 'msg.sender' | 'msg.value';
 
 BooleanLiteral
   : 'true' | 'false' ;
