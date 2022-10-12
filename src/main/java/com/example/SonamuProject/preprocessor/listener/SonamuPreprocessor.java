@@ -164,7 +164,7 @@ public class SonamuPreprocessor extends SolidityBaseListener implements ParseTre
                             case "**":
                                 break;
                             case "%":
-                                op = " 를 ";
+                                op = "을(를) ";
                                 op2 = " 로 나눈 나머지";
                                 strTree.put(ctx, expr1 + op + expr2 + op2);
                                 break;
@@ -180,7 +180,7 @@ public class SonamuPreprocessor extends SolidityBaseListener implements ParseTre
                                 break;
                             case "==":
                                 op = " 와 ";
-                                op2 = " 가 같다.";
+                                op2 = "가 같다.";
                                 strTree.put(ctx, expr1 + op + expr2 + op2);
                                 break;
                             case "!=":
@@ -193,7 +193,7 @@ public class SonamuPreprocessor extends SolidityBaseListener implements ParseTre
                                 if(expr2.equals("빈 지갑 주소"))
                                     strTree.put(ctx, expr1 + "의 주소를 초기화한다.");
                                 else {
-                                    op = " 를 @로 변경한다. ";
+                                    op = "을(를) @로 변경한다. ";
                                     strTree.put(ctx, expr1 + op + "(@ = " + expr2 + ")");
                                 }
                                 break;
@@ -208,28 +208,28 @@ public class SonamuPreprocessor extends SolidityBaseListener implements ParseTre
                             case ">>=":
                                 break;
                             case "+=":
-                                op = " 가 ";
-                                op2 = " 증가한다.";
+                                op = "이(가) ";
+                                op2 = "만큼 증가한다.";
                                 strTree.put(ctx, expr1 + op + expr2 + op2);
                                 break;
                             case "-=":
-                                op = " 가 ";
-                                op2 = " 감소한다.";
+                                op = "이(가) ";
+                                op2 = "만큼 감소한다.";
                                 strTree.put(ctx, expr1 + op + expr2 + op2);
                                 break;
                             case "*=":
-                                op = " 를 ";
+                                op = "을(를) ";
                                 op2 = " 배한다.";
                                 strTree.put(ctx, expr1 + op + expr2 + op2);
                                 break;
                             case "/=":
-                                op = " 를 ";
-                                op2 = " 로 나눈다.";
+                                op = "을(를) ";
+                                op2 = "로 나눈다.";
                                 strTree.put(ctx, expr1 + op + expr2 + op2);
                                 break;
                             case "%=":
-                                op = " 를 ";
-                                op2 = " 로 나눈 나머지로 변경한다.";
+                                op = "을(를) ";
+                                op2 = "로 나눈 나머지로 변경한다.";
                                 strTree.put(ctx, expr1 + op + expr2 + op2);
                                 break;
                             default:
