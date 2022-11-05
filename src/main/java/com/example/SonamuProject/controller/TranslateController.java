@@ -20,7 +20,7 @@ public class TranslateController {
         this.translateService = translateService;
     }
 
-    @PostMapping("/translateSonamu")
+    @PostMapping("/")
     public String translateSonamu(Model model, SourceCode sourceCode) throws FileNotFoundException, UnsupportedEncodingException {
         String output = translateService.translate(sourceCode);
         model.addAttribute("solidity", sourceCode.getCode());

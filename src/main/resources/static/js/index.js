@@ -1,18 +1,7 @@
 $(function(){
 
-    // 언어 선택 라디오 버튼 이벤트
-    $("input[name='typeOfCode']").click(function() {
-        if ($("input[name='typeOfCode']:checked").val() === "sonamu") {
-            $(".extension").text(".sol");
-        }
-        else {
-            $(".extension").text(".sonamu");
-        }
-    })
-
-
     // 파일 불러오기 onChange event
-    $("#openCode").change(function() {
+    $("#openCode").click(function() {
         const content = $("#solidity");
         const file = this.files[0];
         const reader = new FileReader();
@@ -29,41 +18,26 @@ $(function(){
 
     // 파일 저장하기 onClick event
     $("#saveCode").click(function() {
-        let fileName = $("#fileName").val();
-        // 입력 언어에 따라 저장 언어의 확장자 자동 지정
-        fileName += ".sol";
+        let fileName = "solidity.sol"
         const content = $("#solidity").val();
-
-        if (fileName) {
+        if (content) {
             downloadFile(fileName, content);
         } else {
-            alert("저장할 파일의 이름을 입력하세요!");
+            alert("저장할 내용이 없습니다!");
         }
     });
 
     // Form 버튼 클릭 시 자식 페이지 열기
-    $("#formView").click(function() {
+    $("#toForm").click(function() {
         let child = window.open("formView.html", "_blank",
             "height=600, width=400");
     });
-
-    // inputText에 코드 입력 시 textarea 크기 자동 조절
-    // $("#inputText").on('propertychange change keyup paste input', function () {
-    //     $(this).height(1).height($(this).prop('scrollHeight')+5 );
-    // });
-
-    // 페이지 최초 로드 시 textarea 크기 자동 조절
-    // resizeTextArea();
-
-    // 페이지 최초 로드 시 textarea에 줄 번호 표시
-    $('.lined').linedtextarea();
-
 });
 
-// function resizeTextArea() {
-//     $("#inputText").height(1).height($("#inputText").prop('scrollHeight')+5 );
-//     $("#outputText").height(1).height($("#outputText").prop('scrollHeight')+5 );
-// }
+function openFile() {
+    let $input = $('<input id="openCode" type="file" accept=".sol" class="form-control"/>');
+    $input.click();
+}
 
 function downloadFile(fileName, content) {
 

@@ -3,88 +3,75 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>home</title>
+    <title>소나무 - Sonamu</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Yeon+Sung&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/project.css">
-    <link rel="stylesheet" href="/css/jquery-linedtextarea.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css"
-          rel="stylesheet"
-          integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor"
-          crossorigin="anonymous">
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../static/css/project.css">
 </head>
-
 <body>
-<div class="main-container">
-    <div class="temp-box box-headline">
-        <a style="color:black !important;" class="text-decoration-none" href="./">
-            <img width="270" height="100" class="" src="https://github.com/sonamu-project/SonamuProjectWeb/blob/master/src/main/resources/images/Sonamu_logo.png?raw=true" alt="소나무 logo">
+
+<!--nav bar-->
+<nav class="navbar navbar-expand-md navbar-dark bg-dark mb-4">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/">
+            <img src="/images/sonamu_logo.png" alt="소나무 logo" width="160" height="46">
         </a>
-    </div>
-    <div class="temp-box box-loading">
-        <h3>불러오기</h3>
-        <div class="col">
-            <input id="openCode" type="file" accept=".sol" class="form-control"/>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav me-auto mb-2 mb-md-0">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="/">번역하기</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/upload">블록체인 업로드</a>
+                </li>
+            </ul>
         </div>
     </div>
-    <div class="temp-box box-save">
-        <h3>코드 저장하기</h3>
-        <div class="row">
-            <div class="col input-box">
-                <input id="fileName" placeholder="다운 받을 파일 이름 지정" class="form-control"/>
-                <span class="extension">.sol</span>
+</nav>
+
+<main class="container">
+    <div class="mx-auto">
+        <div class="row main-row">
+            <!-- solidity -->
+            <div class="col-md border border-2 rounded textarea-col">
+                <form id="translateFormSonamu" method="post">
+                    <input type="hidden" name="typeOfCode" value="solidity"/>
+                    <label for="solidity" class="form-label">Solidity</label>
+                    <hr>
+                    <textarea class="form-control" type="text" name="code"
+                              placeholder="번역할 코드를 입력하세요." rows="15"
+                              th:text="${solidity}" id="solidity"></textarea>
+                    <hr>
+                    <div class="solidity-button row">
+                        <button id="loadCode" onClick="openFile()" class="col btn btn-link"><img src="/images/upload_icon.png" alt="불러오기" width="30" height="30"></button>
+                        <button id="saveCode" class="col btn btn-link"><img src="/images/save_icon.png" width="30" height="30"></button>
+                        <button id="toForm" class="col btn btn-link"><img src="/images/form_icon.png" width="30" height="30"></button>
+                        <button id="translate" type="submit" class="col-7 btn btn-link"><img src="/images/translate_icon.png" width="40" height="40"></button>
+                    </div>
+                </form>
             </div>
-            <div class="col">
-                <button id="saveCode" class="form-control border-success">파일 다운로드</button>
+            <!-- sonamu -->
+            <div class="col-md border border-2 rounded textarea-col">
+                <label for="sonamu" class="form-label">Sonamu</label>
+                <hr>
+                <textarea class="form-control" type="text" name="code"
+                          placeholder="'번역' 버튼을 클릭하면 번역 결과가 표시됩니다." rows="15"
+                          th:text="${sonamu}" id="sonamu"></textarea>
             </div>
         </div>
     </div>
-    <div class="temp-box box-line">
-        <hr class="bg-danger border-2 border-top border-secondary w-100">
-    </div>
-    <div class="temp-box box-solidity">
-        <h3>Solidity</h3>
-    </div>
-    <div class="temp-box box-formButton">
-        <h3> &nbsp <h3>
-        <div class="col">
-            <button class="form-control border-success" id="formView" type="submit">Form</button>
-        </div>
 
-    </div>
+</main>
 
-    <div class="temp-box box-translate">
-        <form id="translateFormSonamu" th:action="@{/translateSonamu}" method="post">
-
-            <div class="Solidity-row-3" style="border:1px;height:91%;">
-                <p><textarea class="lined" type="text" name="code"
-                             placeholder="번역할 코드를 입력하세요. "
-                             th:utext="${solidity}" id="solidity"></textarea></p>
-            </div>
-            <div class="box-view">
-                <input type="hidden" name="typeOfCode" value="solidity"/>
-                <button class="form-control border-success" type="submit">소나무언어로 확인하기</button>
-            </div>
-        </form>
-    </div>
-
-
-
-    <div class="temp-box box-sonamu">
-        <h3>Sonamu</h3>
-    </div>
-    <div class="temp-box box-sonamuText">
-        <p><textarea class="lined" type="text" name="code" placeholder="소나무언어로 확인하기"
-                     th:text="${sonamu}"></textarea></p>
-    </div>
-</div>
 <script src="http://code.jquery.com/jquery-latest.js"></script>
 <script type="text/javascript" src="/js/index.js"></script>
-<script type="text/javascript" src="/js/jquery-linedtextarea.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2"
-        crossorigin="anonymous"></script>
+<script type="text/javascript" src="/js/bootstrap.min.js"></script>
 </body>
 </body>
 </html>
